@@ -1,0 +1,31 @@
+#!/bin/sh
+#
+# Author: Jake Hilton <red5@jakehilton.com>
+# /etc/init.d/red5
+#
+# Check for missing file
+RED5_DIR=/home/cubie/wkdir/red5/red5-1.0.0-build-jenkins-red5-226
+test -x $RED5_DIR/red5.sh || exit 5
+
+case "$1" in
+    start)
+        echo -n "Starting Red5 Service"
+        echo -n " "
+        cd $RED5_DIR
+        su -s /bin/bash -c "$RED5_DIR/red5.sh &" cubie
+        sleep 2
+        ;;
+    stop)
+        echo -n "Shutting down red5"
+        echo -n " "
+        cd $RED5_DIR
+        su -s /bin/bash -c "$RED5_DIR/red5-shutdown.sh &" cubie
+        sleep 2
+        ;;
+    restart)
+        ## Stop the service and regardless of whether it was
+        ## running or not, start it again.
+        $0 stop
+        $0 start
+        ;;
+esac
