@@ -1,65 +1,21 @@
-#! /bin/sh
-### BEGIN INIT INFO
-# Provides:          rc.local
-# Required-Start:    $all
-# Required-Stop:
-# Default-Start:     2 3 4 5
-# Default-Stop:
-# Short-Description: Run /etc/rc.local if it exist
-### END INIT INFO
+#!/bin/sh -e
+#
+# rc.local
+#
+# This script is executed at the end of each multiuser runlevel.
+# Make sure that the script will "exit 0" on success or any other
+# value on error.
+#
+# In order to enable or disable this script just change the execution
+# bits.
+#
+# By default this script does nothing.
 
+mkdir /var/run/zabbix
+chmod 777 /var/run/zabbix/
+/usr/local/sbin/zabbix_agentd
 
-PATH=/sbin:/usr/sbin:/bin:/usr/bin
+#sleep 60
+/home/cubie/wkdir/streamer_run.sh
 
-. /lib/init/vars.sh
-. /lib/lsb/init-functions
-
-do_start() {
-	if [ -x /etc/rc.local ]; then
-	        [ "$VERBOSE" != no ] && log_begin_msg "Running local boot scripts (/etc/rc.local)"
-		/etc/rc.local
-		ES=$?
-		[ "$VERBOSE" != no ] && log_end_msg $ES
-		return $ES
-	fi
-}
-
-case "$1" in
-    start)
-	do_start
-        ;;
-    restart|reload|force-reload)
-        echo "Error: argument '$1' not supported" >&2
-        exit 3
-        ;;
-    stop)
-        ;;
-    *)
-        echo "Usage: $0 start|stop" >&2
-        exit 3
-        ;;
-esac
-
-#cd /home/cubie/wkdir/red5/red5-1.0.0-build-jenkins-red5-226/
-#/bin/bash ./red5.sh
-#echo "cubie" | sudo chmod a+r /dev/sunxi_mem
-#echo "cubie" | sudo chmod a+w /dev/sunxi_mem
-#cd /home/cubie/wkdir/rtmpstreamer/
-#/bin/bash ./rtmpstreamer rtmp://192.168.2.104/demos/streamer
-
-#/etc/init.d/test
-
-#su -s cubie
-#export PATH=$PATH:/home/cubie/wkdir/rtmpstreamer
-sleep 30
-cd /home/cubie/wkdir/rtmpstreamer
-#cd /home/cubie/wkdir/red5/red5-1.0.0-build-jenkins-red5-226/
-#/bin/bash ./red5.sh &
-#echo "cubie" | sudo /etc/init.d/red5 start
-
-echo "cubie" | sudo chmod a+r /dev/sunxi_mem
-echo "cubie" | sudo chmod a+w /dev/sunxi_mem
-echo "rtmp_streamer start !!"
-
-#su -s cubie
-./rtmp_streamer rtmp://192.168.10.7/oflaDemo/streamer &
+exit 0
